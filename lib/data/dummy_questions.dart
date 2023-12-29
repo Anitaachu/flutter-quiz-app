@@ -1,12 +1,12 @@
 import 'package:first_app/models/question_screen.dart';
 
-const dummyQuestion = [
+const dummyQuestions = [
   QuizQuestion(
     'What is Flutter?',
     [
-      'Mobile development programming language',
+      'Programming language for mobile app development',
       'Web programming language',
-      'Language for software testing',
+      'Language for xsoftware testing',
       'Not a programming language',
     ],
   ),

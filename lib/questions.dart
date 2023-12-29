@@ -3,7 +3,12 @@ import 'package:first_app/answer_button.dart';
 import 'package:first_app/data/dummy_questions.dart';
 
 class QuestionScreen extends StatefulWidget {
-  const QuestionScreen({super.key});
+  const QuestionScreen({
+    super.key,
+    required this.onSelectAnswer,
+  });
+
+  final void Function(String answer) onSelectAnswer;
 
   @override
   State<QuestionScreen> createState() {
@@ -12,28 +17,41 @@ class QuestionScreen extends StatefulWidget {
 }
 
 class _QuestionScreenState extends State<QuestionScreen> {
+  var currentQuestionIndex = 0;
+
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer);
+    setState(() {
+      currentQuestionIndex++;
+    });
+  }
+
   @override
   Widget build(context) {
-    final currentQuestion = dummyQuestion[0];
+    final currentQuestion = dummyQuestions[currentQuestionIndex];
     return SizedBox(
         width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(currentQuestion.text,
-                style: const TextStyle(color: Colors.white)),
-            const SizedBox(height: 30),
-            AnswerButton(
-              answerText: currentQuestion.answers[0],
-              onTap: () {},
-            ),
-            AnswerButton(
-              answerText: currentQuestion.answers[1],
-              onTap: () {},
-            ),
-            AnswerButton(answerText: currentQuestion.answers[2], onTap: () {}),
-            AnswerButton(answerText: currentQuestion.answers[3], onTap: () {}),
-          ],
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                currentQuestion.text,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+              ...currentQuestion.getShuffledAnswers().map((answer) {
+                return AnswerButton(
+                  answerText: answer,
+                  onTap: () {
+                    answerQuestion(answer);
+                  },
+                );
+              })
+            ],
+          ),
         ));
   }
 }
